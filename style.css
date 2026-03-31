@@ -500,11 +500,12 @@ h1, h2, h3, h4, .h2, .h1-giant, .nav-logo {
 .tool-list li:hover::before { opacity: 1; transform: scale(1.3); }
 
 /* ======= SHOWCASE SLIDER ======= */
-#showcase { background: var(--bg-dark); color: var(--white); }
+#showcase { background: var(--bg-dark); color: var(--white); overflow: hidden; }
 .showcase-slider-wrap {
     position: relative;
     margin-top: 3rem;
-    overflow: hidden;
+    overflow: visible;
+    padding: 0 4vw;
 }
 .showcase-track {
     display: flex;
@@ -512,7 +513,7 @@ h1, h2, h3, h4, .h2, .h1-giant, .nav-logo {
     transition: transform .6s var(--ease);
 }
 .showcase-slide {
-    flex: 0 0 clamp(320px, 45vw, 600px);
+    flex: 0 0 clamp(320px, 42vw, 560px);
     border-radius: var(--radius);
     overflow: hidden;
     aspect-ratio: 16/10;
