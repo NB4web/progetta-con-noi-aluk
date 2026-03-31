@@ -3,7 +3,7 @@
    Light Mode - Kinetic - Conversion-Centric
    =========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 /* --- TOKENS --- */
 :root {
@@ -22,8 +22,8 @@
     --border: rgba(0, 0, 0, 0.08);
     --border-dark: rgba(255, 255, 255, 0.1);
     --border-hover: rgba(0, 0, 0, 0.2);
-    --font-h: 'Outfit', sans-serif;
-    --font-b: 'Inter', sans-serif;
+    --font-h: 'Poppins', sans-serif;
+    --font-b: 'Poppins', sans-serif;
     --radius: 24px;
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
