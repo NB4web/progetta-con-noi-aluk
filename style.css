@@ -80,6 +80,9 @@ section {
     z-index: 1;
 }
 
+#progetta { padding-bottom: clamp(2rem, 4vw, 4rem); }
+#consulenza { padding-top: clamp(2rem, 4vw, 4rem); }
+
 #hero { z-index: 2; }
 #prodotti { z-index: 5; }
 #vantaggi { z-index: 10; }
