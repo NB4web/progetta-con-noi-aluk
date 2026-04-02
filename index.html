@@ -396,6 +396,7 @@
                         </div>
                     </div>
                     <p class="form-note mt-2">*I campi contrassegnati sono obbligatori.</p>
+                    <div class="h-captcha" data-captcha="true"></div>
                     <button type="submit" class="btn btn-white btn-block mt-3">Invia richiesta</button>
                 </form>
             </div>
@@ -421,5 +422,17 @@
     </footer>
 
     <script src="main.js"></script>
+    <script src="https://web3forms.com/client/script.js" async defer></script>
+    <script>
+        const form = document.getElementById('alukForm');
+        form.addEventListener('submit', function(e) {
+            const hCaptcha = form.querySelector('textarea[name=h-captcha-response]');
+            if (hCaptcha && !hCaptcha.value) {
+                e.preventDefault();
+                alert('Per favore completa il captcha prima di inviare.');
+                return;
+            }
+        });
+    </script>
 </body>
 </html>
