@@ -341,7 +341,6 @@
                     <input type="hidden" name="access_key" value="ff7f72ed-87eb-4a9c-ac56-c0029ff6cfa5">
                     <input type="hidden" name="redirect" value="thankyou.html">
                     <input type="hidden" name="subject" value="Nuova richiesta progettista - AluK Landing">
-                    <input type="hidden" name="webhook" value="https://script.google.com/macros/s/AKfycbyKzQzWdzm2oDs1KJNXlcEGv-Tj2utryUE7MIkdlYA9XcAt95glOw4kyjb-C7xqdbHz2g/exec">
                     <input type="hidden" name="ruolo" id="hiddenRuolo" value="Progettista">
 
                     <div class="form-grid">
@@ -432,6 +431,16 @@
                 alert('Per favore completa il captcha prima di inviare.');
                 return;
             }
+            
+            // Invia dati in background a Google Sheets
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyKzQzWdzm2oDs1KJNXlcEGv-Tj2utryUE7MIkdlYA9XcAt95glOw4kyjb-C7xqdbHz2g/exec";
+            fetch(googleScriptUrl, {
+                method: "POST",
+                mode: "no-cors",
+                body: new FormData(form)
+            }).catch(err => console.error("Errore salvataggio Sheets", err));
+            
+            // Il form proseguirà normalmente l'invio nativo a Web3Forms per l'invio email
         });
     </script>
 </body>
