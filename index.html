@@ -342,6 +342,7 @@
                     <input type="hidden" name="redirect" value="https://partneraluk.it/progettisti/thankyou.html">
                     <input type="hidden" name="subject" value="Nuova richiesta progettista - AluK Landing">
                     <input type="hidden" name="ruolo" id="hiddenRuolo" value="Progettista">
+                    <input type="hidden" name="form_type" value="landing_progettisti">
 
                     <div class="form-grid">
                         <div class="field">
@@ -447,6 +448,12 @@
                 headers: { "Content-Type": "text/plain" },
                 body: JSON.stringify(formDataObj)
             }).catch(err => console.error("Errore salvataggio Sheets"));
+            
+            // Make.com → LeadWin CRM
+            navigator.sendBeacon(
+                'https://hook.eu2.make.com/fwvihtv3qhoe10lekjdhd7pl73e0zn5d',
+                new Blob([JSON.stringify(formDataObj)], { type: 'application/json' })
+            );
             
             // Il form procede nativamente a Web3Forms senza blocchi!
         });
