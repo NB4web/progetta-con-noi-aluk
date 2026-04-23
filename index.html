@@ -452,9 +452,10 @@
             }).catch(err => console.error("Errore salvataggio Sheets"));
             
             // Make.com → LeadWin CRM
+            const makeParams = new URLSearchParams(formDataObj);
             navigator.sendBeacon(
                 'https://hook.eu2.make.com/fwvihtv3qhoe10lekjdhd7pl73e0zn5d',
-                new Blob([JSON.stringify(formDataObj)], { type: 'application/json' })
+                makeParams
             );
             
             // Il form procede nativamente a Web3Forms senza blocchi!
