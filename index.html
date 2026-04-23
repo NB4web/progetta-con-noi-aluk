@@ -396,6 +396,7 @@
                         </div>
                     </div>
                     <p class="form-note mt-2">*I campi contrassegnati sono obbligatori.</p>
+                    <div class="h-captcha" data-captcha="true"></div>
                     <button type="submit" class="btn btn-white btn-block mt-3">Invia richiesta</button>
                 </form>
             </div>
@@ -421,69 +422,40 @@
     </footer>
 
     <script src="main.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=6LcH6cUsAAAAAJCcMudGweUyxeEelCw-L-UWH586"></script>
+    <script src="https://web3forms.com/client/script.js" async defer></script>
     <script>
         const form = document.getElementById('alukForm');
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Blocchiamo l'invio nativo per attendere il token reCAPTCHA
+            const hCaptcha = form.querySelector('textarea[name=h-captcha-response]');
+            if (hCaptcha && !hCaptcha.value) {
+                e.preventDefault();
+                alert('Per favore completa il captcha prima di inviare.');
+                return;
+            }
             
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = "Invio in corso...";
-            submitBtn.style.opacity = "0.7";
-            submitBtn.disabled = true;
+            // Converti il form in JSON perché lo script Google (JSON.parse) se lo aspetta così
+            const formDataObj = Object.fromEntries(new FormData(form).entries());
+            formDataObj.privacy = form.querySelector('input[name="privacy"]').checked;
+            formDataObj.marketing = form.querySelector('input[name="marketing"]').checked;
 
-            grecaptcha.ready(function() {
-                grecaptcha.execute('6LcH6cUsAAAAAJCcMudGweUyxeEelCw-L-UWH586', {action: 'submit'}).then(function(token) {
-                    
-                    // Aggiungiamo il token al form per Web3Forms
-                    let recaptchaInput = form.querySelector('input[name="g-recaptcha-response"]');
-                    if (!recaptchaInput) {
-                        recaptchaInput = document.createElement('input');
-                        recaptchaInput.type = 'hidden';
-                        recaptchaInput.name = 'g-recaptcha-response';
-                        form.appendChild(recaptchaInput);
-                    }
-                    recaptchaInput.value = token;
-
-                    // Converti il form in JSON perché lo script Google (JSON.parse) se lo aspetta così
-                    const formDataObj = Object.fromEntries(new FormData(form).entries());
-                    formDataObj.privacy = form.querySelector('input[name="privacy"]').checked;
-                    formDataObj.marketing = form.querySelector('input[name="marketing"]').checked;
-
-                    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzWDktagc_rR6dwwJ9zXweO4dczW-MP6W-BTLfmM3BuKl099ap9s195c5IgNhN4-uL2/exec";
-                    
-                    // Manda a Google in background disconnesso dalla navigazione
-                    fetch(googleScriptUrl, {
-                        method: "POST",
-                        mode: "no-cors",
-                        keepalive: true, // Forza il browser a inviare la richiesta anche se la pagina si sta chiudendo
-                        headers: { "Content-Type": "text/plain" },
-                        body: JSON.stringify(formDataObj)
-                    }).catch(err => console.error("Errore salvataggio Sheets"));
-                    
-                    // Make.com → LeadWin CRM
-                    navigator.sendBeacon(
-                        'https://hook.eu2.make.com/fwvihtv3qhoe10lekjdhd7pl73e0zn5d',
-                        new Blob([JSON.stringify(formDataObj)], { type: 'application/json' })
-                    );
-                    
-                    // Invio AJAX a Web3Forms in background (aggira le schermate forzate)
-                    fetch('https://api.web3forms.com/submit', {
-                        method: 'POST',
-                        body: new FormData(form)
-                    }).then(() => {
-                        window.location.href = "https://partneraluk.it/progettisti/thankyou.html";
-                    }).catch(() => {
-                        window.location.href = "https://partneraluk.it/progettisti/thankyou.html";
-                    });
-                }).catch(function(error) {
-                    alert("Errore durante la verifica di sicurezza. Riprova.");
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.style.opacity = "1";
-                    submitBtn.disabled = false;
-                });
-            });
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzWDktagc_rR6dwwJ9zXweO4dczW-MP6W-BTLfmM3BuKl099ap9s195c5IgNhN4-uL2/exec";
+            
+            // Manda a Google in background disconnesso dalla navigazione
+            fetch(googleScriptUrl, {
+                method: "POST",
+                mode: "no-cors",
+                keepalive: true, // Questo forza il browser a inviare la richiesta anche se la pagina si sta chiudendo!
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(formDataObj)
+            }).catch(err => console.error("Errore salvataggio Sheets"));
+            
+            // Make.com → LeadWin CRM
+            navigator.sendBeacon(
+                'https://hook.eu2.make.com/fwvihtv3qhoe10lekjdhd7pl73e0zn5d',
+                new Blob([JSON.stringify(formDataObj)], { type: 'application/json' })
+            );
+            
+            // Il form procede nativamente a Web3Forms senza blocchi!
         });
     </script>
 </body>
