@@ -468,8 +468,15 @@
                         new Blob([JSON.stringify(formDataObj)], { type: 'application/json' })
                     );
                     
-                    // Il form procede nativamente a Web3Forms
-                    form.submit();
+                    // Invio AJAX a Web3Forms in background (aggira le schermate forzate)
+                    fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        body: new FormData(form)
+                    }).then(() => {
+                        window.location.href = "https://partneraluk.it/progettisti/thankyou.html";
+                    }).catch(() => {
+                        window.location.href = "https://partneraluk.it/progettisti/thankyou.html";
+                    });
                 }).catch(function(error) {
                     alert("Errore durante la verifica di sicurezza. Riprova.");
                     submitBtn.innerHTML = originalText;
